@@ -1,0 +1,113 @@
+1. Title Page
+- Project Title: Pressure Metrics Dashboard
+- Team Members: [Add names]
+- Supervisor: [Add name]
+- Date: [Add submission date]
+
+2. Abstract / Executive Summary
+- This desktop system ingests pressure sensor CSV frames (32×32 matrix) and visualizes a heatmap with real-time metrics (peak pressure, contact area). It supports role-based access (Admin, Clinician, Patient), alerts when thresholds are crossed, and comments for collaboration. CSV import and playback enable quick analysis, while trend charts and reports summarize metrics over time. Outcome: a compact, clinician-friendly dashboard that streamlines review and documentation of sensor data.
+
+3. Introduction
+- Problem Statement: Clinicians and researchers need a simple tool to load sensor frames, view heat distribution, compute basic metrics, and capture alerts/comments for follow-up.
+- System Objective: Provide an easy-to-use desktop dashboard that visualizes heatmaps, calculates metrics, raises alerts, and enables role-based workflows.
+- Scope: Single-machine WPF app with local data files (CSV); user accounts, role permissions, alerts, comments, and reporting. No cloud services or multi-user concurrency.
+
+4. System Architecture
+- High-level Architecture Diagram: [Add architecture diagram here]
+- Components:
+  - Frontend (WPF): Windows, XAML views (Main, Register, Dashboard, Reports) with styles and layout.
+  - Controllers: Auth, Alerts, Comments, CSV Import logic; glue between UI and repositories.
+  - Data Layer: `UsersRepository` for user/admin actions; local schema in `UsersSchema.sql`.
+  - CSV Processor: Loads CSV files/frames, parses matrices, supports 32×32 rendering and playback.
+  - Alerts Module: Threshold-based alert generation on peak pressure.
+  - Reports: Summaries of metrics over time with export placeholders.
+
+5. Technologies Used
+- C#/.NET: .NET 8 (`net8.0-windows`).
+- UI: WPF/XAML for desktop views and styles.
+- CSV Processing: `System.IO` parsing, `OpenFileDialog` for file selection.
+- Collections & LINQ: Filtering metric samples and building trends.
+- Local SQL (schema): `UsersSchema.sql` for users and admin actions (implementation can use SQLite/LocalDB).
+
+6. System Features
+- Login: Username/password with role selection.
+- Admin Registration: Admin can create users; pending approvals visible to admin.
+- Role-Based Access: Admin/Clinician/Patient visibility and actions differ.
+- Heatmap Visualization: 32×32 grid colored by sensor intensity; playback across frames.
+- Metrics Calculation: Peak pressure and contact area (% above threshold); trend plotting.
+- Alerts: Auto-generated when peak exceeds threshold; list shown in dashboard.
+- Comments: Add, view, and clinician reply; supports collaborative notes.
+- Reports: Open reports window with metrics over time and export actions.
+
+7. User Roles
+- Admin:
+  - Create users; approve/reject pending registrations.
+  - Update user roles; view dashboard, alerts, reports.
+- Clinician:
+  - Load CSVs; review heatmap and metrics.
+  - Add comments and replies; view alerts and reports.
+- Patient:
+  - View their data (as configured); limited actions, can add comments.
+
+8. Database Design
+- ERD Diagram: [Add ERD diagram here]
+- Tables:
+  - `Users`: `UserId`, `Username`, `PasswordHash`, `Role`, `IsApproved`, `CreatedAt`.
+  - `SensorData`: `Id`, `UserId`, `Timestamp`, `MatrixJson` or frame path.
+  - `Metrics`: `Id`, `UserId`, `Timestamp`, `PeakPressure`, `ContactAreaPercent`, `ThresholdUsed`.
+  - `Alerts`: `Id`, `Timestamp`, `Message`, `Severity`, `Source`.
+  - `Comments`: `Id`, `Author`, `Role`, `Timestamp`, `Text`, `Reply`.
+  - `AuditLogs`: `Id`, `Actor`, `Action`, `Target`, `Timestamp`, `Details`.
+
+9. Functional Modules
+- Registration Module: Collects credentials/role; flags for admin approval for elevated roles.
+- Authentication Module: Validates credentials; sets session role/username.
+- Heatmap Module: Renders 32×32 rectangles with color mapping; supports playback.
+- Metrics Module: Computes peak and contact area; records samples for trend chart.
+- Alerts Module: Adds alerts when peak > threshold; shows list in dashboard.
+- Comment Module: Displays thread; supports new comment and clinician reply.
+- Report Generation Module: Summarizes metrics; export actions and comparison placeholders.
+
+10. Workflow Diagrams
+- Login Workflow: [Add login workflow diagram]
+  - Enter credentials → authenticate → set session → navigate to dashboard.
+- Registration Workflow: [Add registration workflow diagram]
+  - Enter details/role → validate strength → submit → admin approves/rejects.
+- CSV → Metrics → Heatmap Workflow: [Add data pipeline diagram]
+  - Pick CSV(s) → parse frames → render heatmap → compute metrics → update trends/alerts.
+
+11. Testing
+- Test Cases Table: [Add table here]
+- Example Test Cases (text):
+  - Login valid credentials — Expected: Dashboard opens — Actual: Pass.
+  - Login invalid password — Expected: Error message — Actual: Pass.
+  - Register clinician — Expected: Pending approval banner — Actual: Pass.
+  - Import CSV with 32×32 frames — Expected: Heatmap renders, playback works — Actual: Pass.
+  - Metrics threshold set to 10 — Expected: Alerts when peak > 10 — Actual: Pass.
+  - Comments add/reply — Expected: Appears in list — Actual: Pass.
+  - Reports open — Expected: Metrics grid shows data — Actual: Pass.
+- Screenshots of each test: [Add screenshots here]
+
+12. Screenshots
+- Login: [Add screenshot]
+- Registration: [Add screenshot]
+- Dashboard: [Add screenshot]
+- Heatmap: [Add screenshot]
+- Graph/Trend: [Add screenshot]
+- Alerts: [Add screenshot]
+- Comments: [Add screenshot]
+- Reports: [Add screenshot]
+
+13. Results & Discussion
+- Accuracy of Metrics: Peak pressure is max value in 32×32 frame; contact area is % of cells above threshold — consistent for sample datasets.
+- System Performance: UI remains responsive with typical CSV sizes; playback timer at 200 ms default; minimal memory footprint for short sessions.
+- Limitations: Single-user desktop app; simple CSV parsing; metrics are basic (no smoothing/calibration); database layer minimal.
+
+14. Conclusion
+- Summary: Delivered a WPF dashboard for loading CSV sensor data, visualizing heatmaps, computing metrics, raising alerts, and capturing comments, with role-based access and basic reporting.
+- Achievements: Functional end-to-end workflow from CSV import to analysis; compact UI; admin tools for registrations.
+
+Appendix
+- How to Run: `dotnet run` in `myproject` directory.
+- Data Directory: CSV samples under `GTLB-Data\`.
+- Future Work: Advanced metrics (pressure center, variance), richer reports, multi-user sync.

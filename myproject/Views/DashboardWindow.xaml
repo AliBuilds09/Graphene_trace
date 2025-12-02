@@ -1,0 +1,161 @@
+<Window x:Class="MyProject.Views.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dashboard" Height="640" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Heatmap Panel -->
+        <Border Grid.Column="0" Margin="16" Style="{StaticResource Card}">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <UniformGrid x:Name="HeatmapGrid" Rows="32" Columns="32"/>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Metrics, Trend, and Comments (scrollable right column) -->
+        <ScrollViewer Grid.Column="1" Margin="8,0,8,0" Padding="0,0,28,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="True">
+        <StackPanel MinWidth="520" HorizontalAlignment="Stretch">
+            <TextBlock Text="Metrics" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+            <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <TextBlock Text="Peak Pressure: " FontWeight="SemiBold"/>
+                <TextBlock x:Name="PeakPressureText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Contact Area: " FontWeight="SemiBold"/>
+                <TextBlock x:Name="ContactAreaText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Threshold:" VerticalAlignment="Center"/>
+                <TextBox x:Name="MetricsThresholdInput" Width="50" Text="10" Margin="6,0,0,0"/>
+                <Button x:Name="RecalculateMetricsButton" Content="Recalculate Metrics" Width="160" Margin="10,0,0,0"/>
+                <Button x:Name="TestMetricsButton" Content="Test Metrics" Width="120" Margin="10,0,0,0"/>
+            </StackPanel>
+            </StackPanel>
+            </Border>
+
+            <TextBlock Text="Trend" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+            <StackPanel>
+            <Canvas x:Name="TrendCanvas" Width="340" Height="160" Background="#F5F5F5" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Time Filter:" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TimeFilterCombo" Width="90" Margin="6,0,0,0">
+                    <ComboBoxItem Content="1h" IsSelected="True"/>
+                    <ComboBoxItem Content="6h"/>
+                    <ComboBoxItem Content="24h"/>
+                </ComboBox>
+                <Button x:Name="PopulateDummyMetricsButton" Content="Populate Dummy Metrics" Width="170" Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="ImportCsvButton" Content="Import CSVs" Width="130"/>
+                <Button x:Name="PickCsvFilesButton" Content="Pick CSV Files" Width="130" Margin="10,0,0,0"/>
+                <Button x:Name="PickCsvFolderButton" Content="Pick CSV Folder" Width="130" Margin="10,0,0,0"/>
+            </StackPanel>
+            </StackPanel>
+            </Border>
+
+            <TextBlock Text="Playback" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+            <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <TextBlock Text="Speed (ms):" VerticalAlignment="Center"/>
+                <Slider x:Name="PlaybackSpeedSlider" Width="200" Minimum="50" Maximum="1000" Value="200" TickFrequency="50" IsSnapToTickEnabled="True" Margin="6,0,0,0"/>
+                <TextBlock x:Name="FrameInfoText" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                <Button x:Name="PlayButton" Content="Play" Width="80"/>
+                <Button x:Name="PauseButton" Content="Pause" Width="80" Margin="10,0,0,0"/>
+                <Button x:Name="NextButton" Content="Next" Width="80" Margin="10,0,0,0"/>
+            </StackPanel>
+            </StackPanel>
+            </Border>
+
+            <TextBlock Text="Alerts" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+            <ListBox x:Name="AlertsList" Height="100" Margin="0,0,0,0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="["/>
+                            <TextBlock Text="{Binding Timestamp}"/>
+                            <TextBlock Text="] "/>
+                            <TextBlock Text="{Binding Message}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            </Border>
+
+            <TextBlock Text="Comments" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+            <StackPanel>
+            <ListBox x:Name="CommentsList" Height="140" Margin="0,0,0,6">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="["/>
+                                <TextBlock Text="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm}"/>
+                                <TextBlock Text="] "/>
+                                <TextBlock Text="{Binding Author}" FontWeight="SemiBold"/>
+                                <TextBlock Text=" ("/>
+                                <TextBlock Text="{Binding Role}"/>
+                                <TextBlock Text=")"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Reply}" Foreground="DarkGreen" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox x:Name="CommentInput" Height="60" TextWrapping="Wrap" Margin="0,0,0,6"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6,0,0">
+                <Button x:Name="SubmitCommentButton" Content="Submit Comment" Width="130"/>
+                <Button x:Name="OpenReportsButton" Content="Open Reports" Width="130" Margin="10,0,0,0"/>
+                <Button x:Name="LogoutButton" Content="Logout" Width="100" Margin="10,0,0,0"/>
+                <Button x:Name="CreateUserButton" Content="Create User" Width="120" Margin="10,0,0,0" Visibility="Collapsed"/>
+            </StackPanel>
+            </StackPanel>
+            </Border>
+        <StackPanel x:Name="ClinicianReplyPanel" Margin="0,10,0,0">
+            <TextBlock Text="Clinician Reply" FontWeight="Bold"/>
+            <TextBox x:Name="ReplyInput" Height="60" TextWrapping="Wrap" Margin="0,6,0,6"/>
+            <Button x:Name="ReplyButton" Content="Reply to Selected" Width="150"/>
+        </StackPanel>
+        <!-- Admin: Pending Registrations (moved into right scrollable column) -->
+        <StackPanel x:Name="PendingPanel" Margin="0,12,0,0" Visibility="Collapsed">
+            <TextBlock Text="Pending Registrations" Style="{StaticResource H2}"/>
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Button x:Name="RefreshPendingButton" Content="Refresh" Width="90" Margin="0,0,0,10"/>
+                    <ListBox x:Name="PendingUsersList" Height="160">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
+                                    <TextBlock Text="Username: "/>
+                                    <TextBlock Text="{Binding Username}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="  Role: " Margin="12,0,0,0"/>
+                                    <ComboBox Width="110" SelectedValue="{Binding Role}" Tag="{Binding UserId}">
+                                        <ComboBoxItem Content="Patient"/>
+                                        <ComboBoxItem Content="Clinician"/>
+                                        <ComboBoxItem Content="Admin"/>
+                                    </ComboBox>
+                                    <Button Content="Update Role" Width="100" Margin="8,0,0,0" Tag="{Binding UserId}"/>
+                                    <Button Content="Approve" Width="80" Margin="8,0,0,0" Tag="{Binding UserId}"/>
+                                    <Button Content="Reject" Width="80" Margin="8,0,0,0" Tag="{Binding UserId}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

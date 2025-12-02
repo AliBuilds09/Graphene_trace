@@ -1,0 +1,34 @@
+# Root repo ignores
+
+# Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# IDE/Tooling
+.vs/
+.idea/
+*.user
+*.suo
+*.swp
+
+# Logs and archives
+*.log
+*.rar
+*.zip
+
+# Test coverage
+TestResults/
+coverage*
+
+# NuGet
+**/packages/
+*.nupkg
+
+# Rider/Resharper caches
+.ReSharper*/
+_ReSharper*/
+
+# Local data (keep CSVs unless explicitly removed)
+screenshots/

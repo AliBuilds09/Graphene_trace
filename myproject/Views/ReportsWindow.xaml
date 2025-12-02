@@ -1,0 +1,45 @@
+<Window x:Class="MyProject.Views.ReportsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reports" Height="500" Width="820">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Heatmap Snapshot Panel -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <TextBlock Text="Heatmap Snapshot" FontWeight="Bold" FontSize="16"/>
+            <Border Margin="0,6,0,10" BorderBrush="#CCC" BorderThickness="1" Padding="8">
+                <UniformGrid x:Name="SnapshotHeatmap" Rows="32" Columns="32"/>
+            </Border>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Peak Pressure: " FontWeight="SemiBold"/>
+                <TextBlock x:Name="SelectedPeakText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                <TextBlock Text="Contact Area: " FontWeight="SemiBold"/>
+                <TextBlock x:Name="SelectedAreaText"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Metrics Table and Actions -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock Text="Metrics Over Time" FontWeight="Bold" FontSize="16"/>
+            <DataGrid x:Name="MetricsGrid" AutoGenerateColumns="True" Height="320" Margin="0,6,0,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button x:Name="ExportPdfButton" Content="Export PDF" Width="120"/>
+                <Button x:Name="ExportCsvButton" Content="Export CSV" Width="120" Margin="12,0,0,0"/>
+                <Button x:Name="CompareButton" Content="Compare with previous data" Width="200" Margin="12,0,0,0"/>
+            </StackPanel>
+            <TextBlock x:Name="SummaryText" Margin="0,10,0,0" TextWrapping="Wrap"/>
+            <TextBlock Text="Compare Summary (6h vs 24h)" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBlock x:Name="CompareSummaryText" Margin="0,4,0,0" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <CheckBox x:Name="IncludeAlertsCheckBox" Content="Include Alerts" IsChecked="True"/>
+                <CheckBox x:Name="IncludeCommentsCheckBox" Content="Include Comments" IsChecked="True" Margin="12,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
