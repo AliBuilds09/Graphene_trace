@@ -247,6 +247,16 @@ namespace MyProject.Views
             {
                 CreateUserButton.Visibility = _role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
                 this.Title = $"Dashboard - {_username} ({_role})";
+
+                // Role-based UI visibility per user stories:
+                // - Clinician: can import CSVs and generate reports
+                // - Patient: can view playback/heatmaps and add comments (no import)
+                // - Admin: manages users/approvals; not for clinical import
+                ImportCsvButton.Visibility = Session.IsClinician ? Visibility.Visible : Visibility.Collapsed;
+                PickCsvFilesButton.Visibility = Session.IsClinician ? Visibility.Visible : Visibility.Collapsed;
+                PickCsvFolderButton.Visibility = Session.IsClinician ? Visibility.Visible : Visibility.Collapsed;
+                OpenReportsButton.Visibility = Session.IsClinician ? Visibility.Visible : Visibility.Collapsed;
+
                 if (Session.IsAdmin)
                 {
                     // Admin should be able to see analytics panels too; keep them enabled

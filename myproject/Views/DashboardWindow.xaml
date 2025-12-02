@@ -1,7 +1,7 @@
 <Window x:Class="MyProject.Views.DashboardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dashboard" Height="640" Width="1000">
+        Title="Graphene Trace – Dashboard" Height="640" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="500"/>
