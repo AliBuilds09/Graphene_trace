@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS ClinicianPatientMap (
 
             var adminId = Guid.NewGuid();
             var username = "admin";
-            var tempPassword = "Admin@123!"; // default admin password; must be changed after first login
+            var tempPassword = "Admin1234"; // default admin password; must be changed after first login
             var hash = HashPassword(tempPassword);
             using var insert = conn.CreateCommand();
             insert.CommandText = @"INSERT INTO Users (user_id, username, password_hash, role, created_at, is_active, must_change_password, approved_by_admin)
